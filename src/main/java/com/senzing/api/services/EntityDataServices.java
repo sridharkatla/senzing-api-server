@@ -1000,17 +1000,22 @@ public class EntityDataServices {
       }
 
       // defer to the internal method
-      return this.searchByAttributes(searchCriteria,
-                                     includeOnlySet,
-                                     forceMinimal,
-                                     featureMode,
-                                     withFeatureStats,
-                                     withInternalFeatures,
-                                     withRelationships,
-                                     withRaw,
-                                     uriInfo,
-                                     GET,
-                                     timers);
+      System.err.println("CALLING SEARCH BY ATTRIBUTES....");
+      try {
+        return this.searchByAttributes(searchCriteria,
+                                       includeOnlySet,
+                                       forceMinimal,
+                                       featureMode,
+                                       withFeatureStats,
+                                       withInternalFeatures,
+                                       withRelationships,
+                                       withRaw,
+                                       uriInfo,
+                                       GET,
+                                       timers);
+      } finally {
+        System.err.println("CALLED SEARCH BY ATTRIBUTES.");
+      }
 
     } catch (ServerErrorException e) {
       e.printStackTrace();
