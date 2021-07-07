@@ -79,12 +79,14 @@ public class EntityDataReadServicesTest extends AbstractServiceTest {
 
   @BeforeAll
   public void initializeEnvironment() {
+    System.err.println("INITIALIZING ENVIRONMENT....");
     this.beginTests();
     this.initializeTestEnvironment();
     this.entityDataServices = new EntityDataServices();
     ApiClient apiClient = new ApiClient();
     apiClient.setBasePath(this.formatServerUri(""));
     this.entityDataApi = new EntityDataApi(apiClient);
+    System.err.println("INITIALIZED ENVIRONMENT.");
   }
 
   /**

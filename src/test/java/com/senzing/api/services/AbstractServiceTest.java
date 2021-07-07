@@ -1195,6 +1195,10 @@ public abstract class AbstractServiceTest {
    * @param testFunction The {@link Runnable} to execute.
    */
   protected void performTest(boolean requireNativeApi, Runnable testFunction) {
+    StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+    StackTraceElement testElem = stackTrace[3];
+    System.err.println("\nINVOKING " + testElem.getClass().getSimpleName()
+                           + "." + testElem.getMethodName() + "....");
     if (requireNativeApi) this.assumeNativeApiAvailable();
     boolean success = false;
     try {
@@ -1216,6 +1220,8 @@ public abstract class AbstractServiceTest {
     } finally {
       if (!success) this.incrementFailureCount();
       else this.incrementSuccessCount();
+      System.err.println("INVOKED " + testElem.getClass().getSimpleName()
+                             + "." + testElem.getMethodName() + ".");
     }
   }
 
