@@ -2073,12 +2073,12 @@ public class RepositoryManager {
 
     Result<Long> configId = new Result<>();
     int returnCode = 0;
+    int addedCount = 0;
     try {
       Set<String> existingSet = getEntityTypes(configId);
 
       Map<String, Boolean> entityTypeActions = new LinkedHashMap<>();
       Set<String> addedEntityTypes = new LinkedHashSet<>();
-      int addedCount = 0;
       for (String entityTypeCode : entityTypes) {
         if (existingSet.contains(entityTypeCode)) {
           entityTypeActions.put(entityTypeCode, false);
@@ -2125,14 +2125,14 @@ public class RepositoryManager {
         System.out.println();
       }
 
-      if (addedCount > 0) {
-        destroyApis();
-        initApis(repository, verbose);
-      }
-
     } finally {
       if (configId.getValue() != null) {
         CONFIG_API.close(configId.getValue());
+      }
+
+      if (addedCount > 0) {
+        destroyApis();
+        initApis(repository, verbose);
       }
     }
 

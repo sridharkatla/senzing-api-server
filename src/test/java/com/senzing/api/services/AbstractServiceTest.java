@@ -402,22 +402,34 @@ public abstract class AbstractServiceTest {
     RepositoryManager.setThreadModuleName(moduleName);
     boolean concluded = false;
     try {
+      System.err.println("CREATING REPO....");
       Configuration config = RepositoryManager.createRepo(
           this.getRepositoryDirectory(), true);
       this.repoCreated = true;
+      System.err.println("CREATED REPO.");
 
+      System.err.println("PROCESSING DEFAULT CONFIG....");
       this.processDefaultConfig(config);
+      System.err.println("PROCESSED DEFAULT CONFIG.");
 
+      System.err.println("PREPARING REPOSITORY....");
       this.prepareRepository();
+      System.err.println("PREPARED REPOSITORY.");
 
+      System.err.println("CONCLUDING....");
       RepositoryManager.conclude();
+      System.err.println("CONCLUDED.");
       concluded = true;
 
       // initialize the server
+      System.err.println("STARTING SERVER....");
       this.initializeServer();
+      System.err.println("STARTED SERVER.");
 
       // process the post-initialization config
+      System.err.println("PROCESSING INITIAL CONFIG....");
       this.processInitialConfig();
+      System.err.println("PROCESSED INITIAL CONFIG.");
 
     } catch (RuntimeException e) {
       e.printStackTrace();
