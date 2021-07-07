@@ -1161,7 +1161,10 @@ public class EntityDataServices {
         G2Engine engineApi = provider.getEngineApi();
 
         callingNativeAPI(timers, "engine", "searchByAttributesV2");
+        System.err.println();
         System.err.println("CALLING SEARCH BY ATTRIBUTES....");
+        System.err.println("    json  : " + searchJson);
+        System.err.println("    flags : " + Integer.toBinaryString(flags));
         int result = engineApi.searchByAttributesV2(searchJson, flags, sb);
         System.err.println("CALLED SEARCH BY ATTRIBUTES.");
         calledNativeAPI(timers, "engine", "searchByAttributesV2");
