@@ -1000,22 +1000,17 @@ public class EntityDataServices {
       }
 
       // defer to the internal method
-      System.err.println("CALLING SEARCH BY ATTRIBUTES....");
-      try {
-        return this.searchByAttributes(searchCriteria,
-                                       includeOnlySet,
-                                       forceMinimal,
-                                       featureMode,
-                                       withFeatureStats,
-                                       withInternalFeatures,
-                                       withRelationships,
-                                       withRaw,
-                                       uriInfo,
-                                       GET,
-                                       timers);
-      } finally {
-        System.err.println("CALLED SEARCH BY ATTRIBUTES.");
-      }
+      return this.searchByAttributes(searchCriteria,
+                                     includeOnlySet,
+                                     forceMinimal,
+                                     featureMode,
+                                     withFeatureStats,
+                                     withInternalFeatures,
+                                     withRelationships,
+                                     withRaw,
+                                     uriInfo,
+                                     GET,
+                                     timers);
 
     } catch (ServerErrorException e) {
       e.printStackTrace();
@@ -1166,7 +1161,9 @@ public class EntityDataServices {
         G2Engine engineApi = provider.getEngineApi();
 
         callingNativeAPI(timers, "engine", "searchByAttributesV2");
+        System.err.println("CALLING SEARCH BY ATTRIBUTES....");
         int result = engineApi.searchByAttributesV2(searchJson, flags, sb);
+        System.err.println("CALLED SEARCH BY ATTRIBUTES.");
         calledNativeAPI(timers, "engine", "searchByAttributesV2");
         if (result != 0) {
           throw newInternalServerErrorException(
