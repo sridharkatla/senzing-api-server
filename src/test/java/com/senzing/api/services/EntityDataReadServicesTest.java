@@ -94,10 +94,10 @@ public class EntityDataReadServicesTest extends AbstractServiceTest {
     File repoDirectory = this.getRepositoryDirectory();
 
     Set<String> dataSources = new LinkedHashSet<>();
-    dataSources.add("PASSENGERS");
-    dataSources.add("EMPLOYEES");
-    dataSources.add("VIPS");
-    dataSources.add("MARRIAGES");
+    dataSources.add(PASSENGERS);
+    dataSources.add(EMPLOYEES);
+    dataSources.add(VIPS);
+    dataSources.add(MARRIAGES);
 
     File passengerFile = this.preparePassengerFile();
     File employeeFile = this.prepareEmployeeFile();
