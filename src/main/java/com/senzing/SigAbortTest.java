@@ -218,7 +218,13 @@ public class SigAbortTest {
 
     };
     Thread engineThread = new Thread(runnable);
-
+    engineThread.start();
+    try {
+      engineThread.join();
+    } catch (InterruptedException ignore) {
+      ignore.printStackTrace();
+    }
+    engineApi.destroy();
   }
 
   private static File preparePassengerFile() {
@@ -738,7 +744,7 @@ public class SigAbortTest {
     if (withFeatureStats != null) {
       sb.append("&withFeatureStats=").append(withFeatureStats);
     }
-    if (withInternalFeatures != null) { 
+    if (withInternalFeatures != null) {
       sb.append("&withInternalFeatures=").append(withInternalFeatures);
     }
     if (forceMinimal != null) {
