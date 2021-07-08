@@ -1,23 +1,16 @@
 package com.senzing;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.senzing.api.model.*;
 import com.senzing.api.services.EntityDataServices;
-import com.senzing.api.services.ServicesUtil;
-import com.senzing.api.services.SzApiProvider;
 import com.senzing.g2.engine.G2Engine;
 import com.senzing.g2.engine.G2JNI;
 import com.senzing.io.IOUtilities;
 import com.senzing.repomgr.RepositoryManager;
 import com.senzing.util.JsonUtils;
-import com.senzing.util.Timers;
 
 import javax.json.*;
-import javax.websocket.Session;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 import static com.senzing.api.model.SzAttributeSearchResultType.*;
