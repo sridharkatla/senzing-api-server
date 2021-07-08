@@ -204,7 +204,7 @@ public class SigAbortTest {
     Runnable runnable = () -> {
       List<SearchParameters> paramsList = searchParameters();
       for (SearchParameters params : paramsList) {
-        searchByGetJsonAttrsTest(entityDataServices,
+        searchByGetJsonAttrsTest(engineApi,
                                  params.criteria,
                                  params.includeOnlySet,
                                  params.expectedCount,
@@ -700,7 +700,7 @@ public class SigAbortTest {
   }
 
   public static void searchByGetJsonAttrsTest(
-      EntityDataServices                entityDataServices,
+      G2Engine                          engineApi,
       Map<String, Set<String>>          criteria,
       Set<SzAttributeSearchResultType>  includeOnlySet,
       Integer                           expectedCount,
@@ -763,9 +763,8 @@ public class SigAbortTest {
     String uriText = sb.toString();
     UriInfo uriInfo = newProxyUriInfo(uriText);
 
-    long before = System.nanoTime();
-    SzAttributeSearchResponse response
-        = entityDataServices.searchEntitiesByGet(
+    String result = searchEntitiesByGet(
+        engineApi,
         attrs,
         null,
         includeOnlyParams,
@@ -777,23 +776,6 @@ public class SigAbortTest {
         (withRaw != null ? withRaw : false),
         uriInfo);
 
-      response.concludeTimers();
-      long after = System.nanoTime();
-
-      // TODO(barry): remove this extra code
-      int flags = ServicesUtil.getFlags(
-          (forceMinimal == null) ? false : forceMinimal,
-          (featureMode != null ? featureMode : WITH_DUPLICATES),
-          (withFeatureStats != null ? withFeatureStats : false),
-          (withInternalFeatures != null ? withInternalFeatures : false),
-          (withRelationships != null ? withRelationships : false));
-
-      try {
-        ObjectMapper mapper = new ObjectMapper();
-        String rawJsonText = mapper.writeValueAsString(response.getRawData());
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
   }
 
   /**
@@ -826,7 +808,8 @@ public class SigAbortTest {
     return sb.toString();
   }
 
-  public static List<SzAttributeSearchResult> searchEntitiesByGet(
+  public static String searchEntitiesByGet(
+      G2Engine            engineApi,
       String              attrs,
       List<String>        attrList,
       Set<String>         includeOnlySet,
@@ -909,7 +892,8 @@ public class SigAbortTest {
       }
 
       // defer to the internal method
-      return searchByAttributes(searchCriteria,
+      return searchByAttributes(engineApi,
+                                searchCriteria,
                                 includeOnlySet,
                                 forceMinimal,
                                 featureMode,
@@ -933,7 +917,8 @@ public class SigAbortTest {
     }
   }
 
-  protected static List<SzAttributeSearchResult> searchByAttributes(
+  protected static String searchByAttributes(
+      G2Engine            engineApi,
       JsonObject          searchCriteria,
       Set<String>         includeOnlySet,
       boolean             forceMinimal,
@@ -946,8 +931,6 @@ public class SigAbortTest {
       SzHttpMethod        httpMethod)
   {
     try {
-      SzApiProvider provider = SzApiProvider.Factory.getProvider();
-
       // check for the include-only parameters, convert to result types
       if (includeOnlySet == null) includeOnlySet = Collections.emptySet();
       List<SzAttributeSearchResultType> resultTypes
@@ -991,40 +974,18 @@ public class SigAbortTest {
       // format the search JSON
       final String searchJson = JsonUtils.toJsonText(searchCriteria);
 
-      provider.executeInThread(() -> {
-
-        // get the engine API
-        G2Engine engineApi = provider.getEngineApi();
-
-        System.err.println();
-        System.err.println("CALLING SEARCH BY ATTRIBUTES....");
-        System.err.println("    json  : " + searchJson);
-        System.err.println("    flags : " + Integer.toBinaryString(flags));
-        int result = engineApi.searchByAttributesV2(searchJson, flags, sb);
-        System.err.println("CALLED SEARCH BY ATTRIBUTES.");
-        if (result != 0) {
-          throw new IllegalStateException(engineApi.getLastException());
-        }
-        return sb.toString();
-      });
-
-      JsonObject jsonObject = JsonUtils.parseJsonObject(sb.toString());
-      JsonArray jsonResults = jsonObject.getValue(
-          "/RESOLVED_ENTITIES").asJsonArray();
-
-      // parse the result
-      List<SzAttributeSearchResult> list
-          = SzAttributeSearchResult.parseSearchResultList(
-          null,
-          jsonResults,
-          (f) -> provider.getAttributeClassForFeature(f));
-
-
-      postProcessSearchResults(
-          list, forceMinimal, featureMode, withRelationships);
+      System.err.println();
+      System.err.println("CALLING SEARCH BY ATTRIBUTES....");
+      System.err.println("    json  : " + searchJson);
+      System.err.println("    flags : " + Integer.toBinaryString(flags));
+      int result = engineApi.searchByAttributesV2(searchJson, flags, sb);
+      System.err.println("CALLED SEARCH BY ATTRIBUTES.");
+      if (result != 0) {
+        throw new IllegalStateException(engineApi.getLastException());
+      }
 
       // construct the response
-      return list;
+      return sb.toString();
 
     } catch (ServerErrorException e) {
       e.printStackTrace();
