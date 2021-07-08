@@ -1197,8 +1197,14 @@ public abstract class AbstractServiceTest {
   protected void performTest(boolean requireNativeApi, Runnable testFunction) {
     StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
     StackTraceElement testElem = stackTrace[3];
-    System.err.println("\nINVOKING " + testElem.getClass().getSimpleName()
-                           + "." + testElem.getMethodName() + "....");
+    try {
+      System.err.println(
+          "\nINVOKING "
+              + Class.forName(testElem.getClassName()).getSimpleName()
+              + "." + testElem.getMethodName() + "....");
+    } catch (ClassNotFoundException ignore) {
+      // ignore the exception
+    }
     if (requireNativeApi) this.assumeNativeApiAvailable();
     boolean success = false;
     try {
@@ -1220,8 +1226,14 @@ public abstract class AbstractServiceTest {
     } finally {
       if (!success) this.incrementFailureCount();
       else this.incrementSuccessCount();
-      System.err.println("INVOKED " + testElem.getClass().getSimpleName()
-                             + "." + testElem.getMethodName() + ".");
+      try {
+        System.err.println(
+            "\nINVOKED "
+                + Class.forName(testElem.getClassName()).getSimpleName()
+                + "." + testElem.getMethodName() + ".");
+      } catch (ClassNotFoundException ignore) {
+        // ignore the exception
+      }
     }
   }
 

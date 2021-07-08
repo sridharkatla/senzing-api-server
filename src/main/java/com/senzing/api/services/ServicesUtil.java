@@ -652,11 +652,11 @@ public class ServicesUtil {
    *
    * @return The flags to use given the parameters.
    */
-  static int getFlags(boolean             forceMinimal,
-                      SzFeatureMode       featureMode,
-                      boolean             withFeatureStats,
-                      boolean             withInternalFeatures,
-                      boolean             withRelationships)
+  public static int getFlags(boolean             forceMinimal,
+                             SzFeatureMode       featureMode,
+                             boolean             withFeatureStats,
+                             boolean             withInternalFeatures,
+                             boolean             withRelationships)
   {
     return getFlags(0,
                     forceMinimal,
@@ -684,12 +684,12 @@ public class ServicesUtil {
    *
    * @return The flags to use given the parameters.
    */
-  static int getFlags(int                 baseFlags,
-                      boolean             forceMinimal,
-                      SzFeatureMode       featureMode,
-                      boolean             withFeatureStats,
-                      boolean             withInternalFeatures,
-                      boolean             withRelationships)
+  public static int getFlags(int                 baseFlags,
+                             boolean             forceMinimal,
+                             SzFeatureMode       featureMode,
+                             boolean             withFeatureStats,
+                             boolean             withInternalFeatures,
+                             boolean             withRelationships)
   {
     int flags = baseFlags
               | G2_ENTITY_INCLUDE_RECORD_DATA

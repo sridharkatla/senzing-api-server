@@ -1025,7 +1025,6 @@ public class EntityDataServices {
     }
   }
 
-
   @POST
   @Path("search-entities")
   public SzAttributeSearchResponse searchEntitiesByPost(
